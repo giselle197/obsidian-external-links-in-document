@@ -29,7 +29,7 @@ export class ExternalLinksPluginSettingTab extends PluginSettingTab {
       .setName("Show number of duplicate URLs")
       .addToggle((toggle) => {
         toggle.setTooltip(("default: true"))
-          .setValue(true)
+          .setValue(this.plugin.settings.showDuplicateWarning)
           .onChange(async (value) => {
             this.plugin.settings.showDuplicateWarning = value;
             this.plugin.saveSettings();
@@ -40,7 +40,7 @@ export class ExternalLinksPluginSettingTab extends PluginSettingTab {
     new Setting(containerEl)
       .setName("Color for duplicate URLs")
       .addColorPicker(color => color
-        .setValue("#ff0000")
+        .setValue(this.plugin.settings.duplicateUrlColor)
         .onChange(async (value) => {
           this.plugin.settings.duplicateUrlColor = value;
           this.plugin.saveSettings();
@@ -52,7 +52,7 @@ export class ExternalLinksPluginSettingTab extends PluginSettingTab {
       .setName("Color for internal links")
       .setDesc("internal links can't be clicked")
       .addColorPicker(color => color
-        .setValue("#0000ff")
+        .setValue(this.plugin.settings.internalLinkColor)
         .onChange(async (value) => {
           this.plugin.settings.internalLinkColor = value;
           this.plugin.saveSettings();
@@ -65,7 +65,7 @@ export class ExternalLinksPluginSettingTab extends PluginSettingTab {
       .setDesc("make difference when there is URL in hidden headings")
       .addDropdown(dropdown => dropdown
         .addOptions({ "all": "all in current file", "partial": "only shown in view" })
-        .setValue("all")
+        .setValue(this.plugin.settings.defDuplicate)
         .onChange(async (value) => {
           this.plugin.settings.defDuplicate = value;
           this.plugin.saveSettings();
