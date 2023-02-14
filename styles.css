@@ -6,3 +6,15 @@ available in the app when your plugin is enabled.
 If your plugin does not need CSS, delete this file.
 
 */
+
+.workspace-leaf-content[data-type="external-links-view"] .setting-item {
+  display: "grid";
+  justify-content: start;
+  max-width: fit-content;
+  border-top: 0;
+}
+
+.workspace-leaf-content[data-type="external-links-view"] .setting-item-control {
+  flex-direction: row;
+  float: left;
+}
