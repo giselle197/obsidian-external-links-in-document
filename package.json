@@ -1,6 +1,6 @@
 {
-  "name": "obsidian-external-links-in-document",
-  "version": "1.0.0",
+  "name": "external-links-in-document",
+  "version": "1.0.1",
   "description": "Show all external links (URLs) in the current file",
   "main": "main.js",
   "scripts": {

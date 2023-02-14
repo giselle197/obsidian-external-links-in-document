@@ -1,7 +1,7 @@
 {
-  "id": "obsidian-external-links-in-document",
+  "id": "external-links-in-document",
   "name": "External Links",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "minAppVersion": "0.15.0",
   "description": "Show all external links (URLs) in the current file",
   "author": "Giselle",
