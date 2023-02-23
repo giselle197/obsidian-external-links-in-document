@@ -26,6 +26,19 @@ export class ExternalLinksPluginSettingTab extends PluginSettingTab {
     containerEl.createEl("h1", { text: "My Plugin Settings" });
 
     new Setting(containerEl)
+      .setName("Show URLs from frontmatter values")
+      .setDesc("⚠️ URLs from frontmatter values are not included in the count")
+      .addToggle((toggle) => {
+        toggle.setTooltip(("default: true"))
+          .setValue(this.plugin.settings.showMetadata)
+          .onChange(async (value) => {
+            this.plugin.settings.showMetadata = value;
+            this.plugin.saveSettings();
+            view.onOpen();
+          })
+      });
+
+    new Setting(containerEl)
       .setName("Show number of duplicate URLs")
       .addToggle((toggle) => {
         toggle.setTooltip(("default: true"))
@@ -50,7 +63,7 @@ export class ExternalLinksPluginSettingTab extends PluginSettingTab {
 
     new Setting(containerEl)
       .setName("Color for internal links")
-      .setDesc("internal links can't be clicked")
+      .setDesc("⚠️ internal links can't be clicked")
       .addColorPicker(color => color
         .setValue(this.plugin.settings.internalLinkColor)
         .onChange(async (value) => {

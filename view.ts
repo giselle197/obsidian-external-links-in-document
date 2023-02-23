@@ -97,20 +97,121 @@ export class ExternalLinksView extends ItemView {
       })
   }
 
+  // Code provided by OpenAI ChatGPT 
+  detectUrlsInParagraph(paragraph: any) { // type: string
+    const urlRegex = /((http(s)?:\/\/)|(www\.))[^\s]+/gi;
+    const urls = paragraph.match(urlRegex);
+
+    return urls;
+  }
 
   async render() {
     const { contentEl } = this;
-    for (let i = 0; i < contentEl.childNodes.length; i++) {
-      let child = <HTMLDivElement>contentEl.childNodes[i];
-      if (child.className == "cont") {
-        contentEl.removeChild(child);
-      }
-    }
-    var contEl = contentEl.createEl("div");
-    contEl.className = "cont";
+    // console.log("contentEl.childNodes", contentEl.childNodes);
+
+    // clear old output
+    const temp = document.getElementsByClassName("cont");
+    Array.from(temp).forEach((x) => {
+      x.empty();
+      contentEl.removeChild(x);
+    })
 
     const noteFile = this.app.workspace.getActiveFile()!;
     const fileContent: string = await this.app.vault.read(noteFile);
+
+    if (this.plugin.settings.showMetadata) {
+      // metadata
+      let met = contentEl.createEl("h2", { text: "Metadata" });
+      let metEl = contentEl.createEl("div");
+      met.className = "cont";
+      metEl.className = "cont";
+
+      const ul_metadata = document.createElement("ul");   // metadata ul, outermost layer
+      // ul_metadata.className = "cont";  // error
+      metEl.appendChild(ul_metadata);
+
+      // ref: https://obsidian-snippets.pages.dev/tags/development/
+      const metadata = this.app.metadataCache.getFileCache(noteFile)
+      if (metadata) {
+
+        for (const k in metadata.frontmatter) {
+          if (k == "position") continue;
+
+          const values = metadata.frontmatter[k]
+
+          if (typeof (values) == 'string') {  // there is single URL in this field OR there is a paragraph including several URLs
+            const urls = this.detectUrlsInParagraph(values);
+            if (urls == null) continue;
+
+            if (urls.length == 1) {
+              const li_fieldname = document.createElement("li");
+
+              // make fieldname and link in the same line
+              const title = document.createElement('span');
+              title.innerText = k + ":\t";
+              title.classList.add('metadata-title');
+              li_fieldname.appendChild(title);
+
+              const a = document.createElement("a");
+              a.href = urls[0];
+              a.textContent = urls[0];
+
+              li_fieldname.appendChild(a);
+              ul_metadata.appendChild(li_fieldname);
+
+            }
+            else {
+
+              const li_fieldname = document.createElement("li");
+              li_fieldname.textContent = k;
+              const ul_inner = document.createElement("ol");   // inner layer
+              li_fieldname.appendChild(ul_inner);   // li > ol
+
+              for (const x in urls) {
+
+                const lli = document.createElement("li");
+                const a = document.createElement("a");
+                a.href = urls[x];
+                a.textContent = urls[x];
+
+                ul_inner.appendChild(lli);  // ol > li
+                lli.appendChild(a);
+                ul_metadata.appendChild(li_fieldname);
+              }
+
+            }
+          }
+          else {  // typeof (values) is 'object'  // there are several URLs in this field
+
+            const li_fieldname = document.createElement("li");
+            li_fieldname.textContent = k;
+            const ul_inner = document.createElement("ol");   // inner layer
+
+            for (const i in values) {
+              const urls = this.detectUrlsInParagraph(values[i]);
+
+              li_fieldname.appendChild(ul_inner);   // li > ol
+
+              for (const x in urls) {
+                const lli = document.createElement("li");
+                const a = document.createElement("a");
+                a.href = urls[x];
+                a.textContent = urls[x];
+
+                ul_inner.appendChild(lli);  // ol > li
+                lli.appendChild(a);
+                ul_metadata.appendChild(li_fieldname);
+              }
+            }
+          }
+
+        }
+      }
+
+
+    }
+
+
 
     //ref:  https://www.programcreek.com/typescript/?code=OliverBalfour%2Fobsidian-pandoc%2Fobsidian-pandoc-master%2Frenderer.ts
     // Use Obsidian's markdown renderer to render to a hidden <div>
@@ -141,6 +242,15 @@ export class ExternalLinksView extends ItemView {
     }
     else
       elements = wrapper.querySelectorAll(".external-link");
+
+    if (elements.length > 0 && this.plugin.settings.showMetadata) {
+      // content, context
+      let cont = contentEl.createEl("h2", { text: "Content" });
+      cont.className = "cont";
+    }
+    // content, context
+    let contEl = contentEl.createEl("div");
+    contEl.className = "cont";
 
     const block = Array.from(elements);
 

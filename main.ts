@@ -11,6 +11,7 @@ interface ExternalLinksPluginSettings {
   duplicateUrlColor: string;
   internalLinkColor: string;
   defDuplicate: string;
+  showMetadata: boolean;
 }
 
 const DEFAULT_SETTINGS: Partial<ExternalLinksPluginSettings> = {
@@ -22,6 +23,7 @@ const DEFAULT_SETTINGS: Partial<ExternalLinksPluginSettings> = {
   duplicateUrlColor: "#ff0000",
   internalLinkColor: "#0000ff",
   defDuplicate: "all",
+  showMetadata: true,
 }
 
 
