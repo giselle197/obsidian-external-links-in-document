@@ -1,6 +1,6 @@
-import ExternalLinksPlugin from "main";
+import ExternalLinksPlugin from "src/main";
 import { App, PluginSettingTab, Setting } from "obsidian";
-import { ExternalLinksView, VIEW_TYPE_EXTERNAL_LINKS } from "view";
+import { ExternalLinksView, VIEW_TYPE_EXTERNAL_LINKS } from "src/view";
 
 export class ExternalLinksPluginSettingTab extends PluginSettingTab {
   plugin: ExternalLinksPlugin;

@@ -1,5 +1,5 @@
 import { ItemView, MarkdownRenderer, Setting, WorkspaceLeaf } from "obsidian";
-import ExternalLinksPlugin from "main";
+import ExternalLinksPlugin from "src/main";
 
 export const VIEW_TYPE_EXTERNAL_LINKS = "external-links-view";
 

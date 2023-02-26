@@ -1,5 +1,5 @@
 import { Plugin } from "obsidian";
-import { ExternalLinksPluginSettingTab } from "settings";
+import { ExternalLinksPluginSettingTab } from "src/settings";
 import { ExternalLinksView, VIEW_TYPE_EXTERNAL_LINKS } from "./view";
 
 interface ExternalLinksPluginSettings {
