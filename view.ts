@@ -320,25 +320,36 @@ export class ExternalLinksView extends ItemView {
     for (let i = 0; i < block.length; i++) {
       // console.log("block[i]", block[i]);
       if (block[i].tagName[0] == "H") {
-        // console.log("block[i].childNodes", block[i].childNodes);
 
-        const h = document.createElement(block[i].tagName);
+        // Code provided by OpenAI ChatGPT
+        const h = block[i].cloneNode(true);
         contEl.appendChild(h);
-        h.textContent = block[i].textContent;
-        h.innerHTML = block[i].innerHTML;
 
         // give internal links which are in the headings special color
         // Code provided by OpenAI ChatGPT
         let elements = document.querySelectorAll("h1, h2, h3, h4, h5, h6");
         for (let element of Array.from(elements)) { // Type 'NodeListOf<Element>' must have a '[Symbol.iterator]()' method that returns an iterator.
           let links = element.querySelectorAll("a.internal-link");
-          for (let link of Array.from(links))
-            element.innerHTML = element.innerHTML.replace(link.outerHTML, `<span style="color: ${this.plugin.settings.internalLinkColor};">${link.textContent}</span>`);
+          for (let link of Array.from(links)) {
+            // Code provided by OpenAI ChatGPT 
+            link.replaceWith(
+              Object.assign(document.createElement('span'), {
+                textContent: link.textContent,
+                style: `color: ${this.plugin.settings.internalLinkColor};`
+              })
+            );
+          }
 
           let links2 = element.querySelectorAll("a.external-link");
           for (let link2 of Array.from(links2))
             if ((this.plugin.settings.defDuplicate == "partial" && hrefCounts_partial[link2.getAttribute("href")!] > 1) || (this.plugin.settings.defDuplicate == "all" && hrefCounts_all[link2.getAttribute("href")!] > 1))
-              element.innerHTML = element.innerHTML.replace(link2.innerHTML, `<span style="color: ${this.plugin.settings.duplicateUrlColor};">${link2.innerHTML}</span>`);
+              link2.replaceWith(
+                Object.assign(document.createElement('a'), {
+                  textContent: link2.textContent,
+                  href: link2.getAttribute("href")!,
+                  style: `color: ${this.plugin.settings.duplicateUrlColor};`
+                })
+              );
         }
 
       } else {  // make lists
