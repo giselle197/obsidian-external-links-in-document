@@ -23,7 +23,7 @@ export class ExternalLinksPluginSettingTab extends PluginSettingTab {
     const { containerEl } = this;
 
     containerEl.empty();
-    containerEl.createEl("h1", { text: "My Plugin Settings" });
+    containerEl.createEl("h2", { text: "External Links - Settings" });
 
     new Setting(containerEl)
       .setName("Show URLs from frontmatter values")
