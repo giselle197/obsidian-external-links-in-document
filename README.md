@@ -33,7 +33,7 @@ Copy over `main.js`, `styles.css`, `manifest.json` to your vault `VaultFolder/.o
 basic features -- show URL or title, show headings or not, and sort URLs
 
 ### v1.1.0
-inspired from https://github.com/giselle197/obsidian-external-links-in-document/issues/1, thanks for [@mnaoumov](https://github.com/mnaoumov)'s adivice! 
+inspired from https://github.com/giselle197/obsidian-external-links-in-document/issues/1, thanks for [@mnaoumov](https://github.com/mnaoumov)'s advice! 
 
 Add feature: extract URLs from frontmatter values
 
@@ -41,3 +41,13 @@ Add feature: extract URLs from frontmatter values
 2. URLs in YAML don't participate in sorting.
 3. URLs from frontmatter values are not included in the count. Since they are separated from content region, counting will cause chaos.
 4. I assume users write metadata with care, and the order is meaningful.
+
+### v1.2.0
+inspired from https://github.com/giselle197/obsidian-external-links-in-document/issues/2, thanks for [@matthewaguilarchampeau](https://github.com/matthewaguilarchampeau)'s advice! 
+
+Add feature: exclude external links from specific text in webpage title or URL
+
+1. Exclude webpage title from specific texts: only take effect when choosing to show webpage title.
+2. Exclude URL from specific texts.
+3. Please separate your specific text"s" with newline (in the settings).
+4. When one of the specific texts is the subsequence (substring) of webpage title / URL, the external link will be excluded.

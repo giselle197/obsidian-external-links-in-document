@@ -97,10 +97,18 @@ export class ExternalLinksView extends ItemView {
       })
   }
 
-  // Code provided by OpenAI ChatGPT 
-  detectUrlsInParagraph(paragraph: any) { // type: string
+  detectUrlsInParagraph(paragraph: string) {
+    // Code provided by OpenAI ChatGPT 
     const urlRegex = /((http(s)?:\/\/)|(www\.))[^\s]+/gi;
-    const urls = paragraph.match(urlRegex);
+    let urls = Array.from(paragraph.match(urlRegex)!);   // type: string[]
+    if (!urls)
+      return []
+
+    const blacklistUrlDomain = this.plugin.settings.excludedUrlDomain.split("\n").filter(item => item !== "");
+
+    if (blacklistUrlDomain && Array.isArray(blacklistUrlDomain) && blacklistUrlDomain.length > 0) {
+      urls = urls.filter((url: string) => !blacklistUrlDomain.some(keyword => url.includes(keyword)));
+    }
 
     return urls;
   }
@@ -135,7 +143,7 @@ export class ExternalLinksView extends ItemView {
       if (metadata) {
 
         for (const k in metadata.frontmatter) {
-          if (k == "position") continue;
+          if (k == "position") continue;    // I confused
 
           const values = metadata.frontmatter[k]
 
@@ -207,8 +215,6 @@ export class ExternalLinksView extends ItemView {
 
         }
       }
-
-
     }
 
 
@@ -220,7 +226,7 @@ export class ExternalLinksView extends ItemView {
 
     let elements;
     if (this.plugin.settings.showHeadings) {
-      switch (this.plugin.settings.minShowHeading) {
+      switch (this.plugin.settings.minShowHeading) {  // NOTE: will not filter the external-link in headings
         case 1:
           elements = wrapper.querySelectorAll("h1, p a.external-link"); // DOM
           break
@@ -353,7 +359,7 @@ export class ExternalLinksView extends ItemView {
         }
 
       } else {  // make lists
-        if (i > 0 && block[i - 1].tagName[0] == "H") {
+        if (i > 0 && block[i - 1].tagName[0] == "H") {  // beginning of the list
           ul = document.createElement("ul");
           contEl.appendChild(ul);
         }
@@ -361,12 +367,26 @@ export class ExternalLinksView extends ItemView {
         const li = document.createElement("li");
         const a = document.createElement("a");
 
+        // filter by URL at first
+        a.href = block[i].getAttribute("href")!;
+        const url = this.detectUrlsInParagraph(a.href)
+        if (url.length == 0)
+          continue
+
         if (this.plugin.settings.onlyUrl) {
-          a.href = block[i].getAttribute("href")!;
-          a.textContent = block[i].getAttribute("href")!;
+          a.textContent = a.href;
         } else {
-          a.href = block[i].getAttribute("href")!;
-          a.textContent = block[i].innerHTML;
+
+          const textContent = block[i].innerHTML
+
+          const blacklistWebpageTitle = this.plugin.settings.excludedWebpageTitle.split("\n").filter(item => item !== "");
+
+          if (blacklistWebpageTitle && Array.isArray(blacklistWebpageTitle) && blacklistWebpageTitle.length > 0) {
+            if (blacklistWebpageTitle.some(keyword => textContent.includes(keyword)))
+              continue;
+          }
+          a.textContent = textContent;
+
         }
 
         if ((this.plugin.settings.defDuplicate == "all" && hrefCounts_all[a.href] > 1) || (this.plugin.settings.defDuplicate == "partial" && hrefCounts_partial[a.href] > 1))

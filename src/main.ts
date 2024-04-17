@@ -12,6 +12,8 @@ interface ExternalLinksPluginSettings {
   internalLinkColor: string;
   defDuplicate: string;
   showMetadata: boolean;
+  excludedWebpageTitle: string;
+  excludedUrlDomain: string;
 }
 
 const DEFAULT_SETTINGS: Partial<ExternalLinksPluginSettings> = {
@@ -24,6 +26,8 @@ const DEFAULT_SETTINGS: Partial<ExternalLinksPluginSettings> = {
   internalLinkColor: "#0000ff",
   defDuplicate: "all",
   showMetadata: true,
+  excludedWebpageTitle: "",
+  excludedUrlDomain: "",
 }
 
 

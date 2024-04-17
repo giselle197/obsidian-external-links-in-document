@@ -41,3 +41,13 @@
 2. YAML中的URLs不參與排序。
 3. YAML中的URLs不包括在計數中。因為它們與正文區域分開，計數會造成混亂。
 4. 我假設使用者在寫metadata時很謹慎，並且順序是有意義的。
+
+### v1.2.0
+功能來自 https://github.com/giselle197/obsidian-external-links-in-document/issues/2 ，感謝[@matthewaguilarchampeau](https://github.com/matthewaguilarchampeau)的建議!  
+
+增加功能：排除特定文字出現在網頁標題名稱或URL，二者分開設定
+
+1. 排除包含特定文字的網頁標題：僅在選擇顯示網頁標題時生效。
+2. 排除包含特定文字的網址。
+3. 請在特定文字之間換行（在設置頁中）。
+4. 當特定文字之一 是網頁標題/網址 的子字串時，此外部連結將被排除。

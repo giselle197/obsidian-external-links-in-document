@@ -86,6 +86,28 @@ export class ExternalLinksPluginSettingTab extends PluginSettingTab {
         })
       );
 
+    new Setting(containerEl)
+      .setName("Exclude WebpageTitle from specific texts")
+      .setDesc("⚠️ Only take effect when choosing to show webpage title. newline separated")
+      .addTextArea((item) => {
+        item.setValue(this.plugin.settings.excludedWebpageTitle).onChange((value) => {
+          this.plugin.settings.excludedWebpageTitle = value;
+          this.plugin.saveSettings();
+          view.onOpen();
+        })
+      });
+
+    new Setting(containerEl)
+      .setName("Exclude URLs from specific texts")
+      .setDesc("newline separated")
+      .addTextArea((item) => {
+        item.setValue(this.plugin.settings.excludedUrlDomain).onChange((value) => {
+          this.plugin.settings.excludedUrlDomain = value;
+          this.plugin.saveSettings();
+          view.onOpen();
+        })
+      });
+
   }
 
 }
